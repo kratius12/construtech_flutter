@@ -1,19 +1,19 @@
+
 import 'package:flutter/material.dart';
 import 'package:construtech/cardService.dart';
 import 'package:construtech/databasehelper.dart';
+import 'package:intl/intl.dart';
 
 class EditService extends StatefulWidget {
   const EditService({super.key, required this.title});
+
   final String title;
 
   @override
-  State<EditService> createState() => _ServicioEditState();
+  State<EditService> createState() => _EditService();
 }
 
-// ignore: duplicate_ignore
-class _ServicioEditState extends State<EditService> {
-  // ignore: unused_field
-  Calendaroip calendario = const Calendaroip();
+class _EditService extends State<EditService> {
   final _formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final nombreController = TextEditingController();
@@ -23,6 +23,24 @@ class _ServicioEditState extends State<EditService> {
   final telefonoController = TextEditingController();
   final municipioController = TextEditingController();
   final direccionController = TextEditingController();
+  List<String> listaServicios = [
+    "Estuco",
+    "Pintura",
+    "Colocación de puertas o ventanas",
+    "Recubrimiento para muros",
+    "Herreria",
+    "Carpinteria",
+    "Fontaneria"
+  ];
+  List <String> listaMunicipios = [
+    "Medellín",
+    "Bello",
+    "Itagüi",
+    "Envigado",
+    "Copacabana",
+    "Girardota",
+    "Barbosa"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +68,7 @@ class _ServicioEditState extends State<EditService> {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                          padding: const EdgeInsets.only(top: 15),
+                          padding: const EdgeInsets.only(top: 2),
                           child: TextFormField(
                             controller: nombreController,
                             decoration: const InputDecoration(
@@ -102,32 +120,60 @@ class _ServicioEditState extends State<EditService> {
                             },
                           )),
                       Padding(
-                          padding: const EdgeInsets.only(top: 15, right: 1),
-                          child: TextFormField(
-                            controller: fechaController,
-                            decoration: const InputDecoration(
-                                hintText: 'Seleccione la fecha de la cita',
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                fillColor: Color.fromARGB(255, 198, 198, 198),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                filled: true),
-                            enabled: false,
-                          )),
-                      calendario,
+                        padding: const EdgeInsets.only(top: 15, right: 1),
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                              hintText: 'selecione una fecha para la visita',
+                              hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                              fillColor: Color.fromARGB(255, 198, 198, 198),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              filled: true),
+                          controller: fechaController,
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(2300),
+                            );
+
+                            if (pickedDate != null) {
+                              fechaController.text = pickedDate.toString();
+                            }
+                            if (pickedDate != null) {
+                              fechaController.text =
+                                  DateFormat('dd MMMM yyyy').format(pickedDate);
+                            }
+                          },
+                        ),
+                      ),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
-                          child: TextFormField(
-                            controller: tipoServController,
+                          child: DropdownButtonFormField(
+                            
+                            items: listaServicios.map((String value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value)
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              tipoServController.text=value!;
+                            },
+                            isDense: true,
+                            isExpanded: true,
+                            icon: const Icon(Icons.arrow_circle_down_sharp),
+                            iconSize: 25,
                             decoration: const InputDecoration(
-                                hintText: '¿Que servicio desea cotizar?',
+                                hintText: 'Seleccione un servicio',
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
                                 fillColor: Color.fromARGB(255, 198, 198, 198),
@@ -140,14 +186,10 @@ class _ServicioEditState extends State<EditService> {
                                       width: 0, style: BorderStyle.none),
                                 ),
                                 filled: true),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "El servicio es requerido";
-                              } else {
-                                return null;
-                              }
-                            },
-                          )),
+                          ),
+                          
+                          
+                          ),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
@@ -195,10 +237,23 @@ class _ServicioEditState extends State<EditService> {
                           )),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
-                          child: TextFormField(
-                            controller: municipioController,
+                          child: DropdownButtonFormField(
+                            
+                            items: listaMunicipios.map((String value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value)
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              municipioController.text=value!;
+                            },
+                            isDense: true,
+                            isExpanded: true,
+                            icon: const Icon(Icons.arrow_circle_down_sharp),
+                            iconSize: 25,
                             decoration: const InputDecoration(
-                                hintText: 'Municipio',
+                                hintText: 'Seleccione un municipio',
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
                                 fillColor: Color.fromARGB(255, 198, 198, 198),
@@ -211,14 +266,10 @@ class _ServicioEditState extends State<EditService> {
                                       width: 0, style: BorderStyle.none),
                                 ),
                                 filled: true),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "El municipio es requerido";
-                              } else {
-                                return null;
-                              }
-                            },
-                          )),
+                          ),
+                          
+                          
+                          ),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
@@ -296,16 +347,17 @@ class _ServicioEditState extends State<EditService> {
                                               const cardService()),
                                     );
                                   }
-                                   await DatabaseHelper.update(
-                                          
-                                          nombre: nombreController.text,
-                                          apellido: apellidosController.text,
-                                          direccion: direccionController.text,
-                                          fecha: fechaController.text,
-                                          municipio: municipioController.text,
-                                          telefono: telefonoController.text,
-                                          tipoServ: tipoServController.text, id: 1
-                                        );
+                                  await DatabaseHelper.update(
+                                    
+                                      nombre: nombreController.text,
+                                      apellido: apellidosController.text,
+                                      direccion: direccionController.text,
+                                      fecha: fechaController.text,
+                                      municipio: municipioController.text,
+                                      telefono: telefonoController.text,
+                                      tipoServ: tipoServController.text, id: null,
+                                    
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
@@ -322,41 +374,5 @@ class _ServicioEditState extends State<EditService> {
         ),
       ),
     );
-  }
-}
-
-class Calendaroip extends StatefulWidget {
-  const Calendaroip({super.key});
-
-  @override
-  State<Calendaroip> createState() => _CalendaroipState();
-}
-
-class _CalendaroipState extends State<Calendaroip> {
-  DateTime? _selectdate;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: _presPacker,
-        child: const Icon(Icons.calendar_today_rounded));
-  }
-
-  void _presPacker() {
-    showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2020),
-            lastDate: DateTime.now())
-        .then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
-      setState(() {
-        _selectdate = pickedDate;
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(" Ha selecionado esta fecha $_selectdate")));
-      });
-    });
   }
 }

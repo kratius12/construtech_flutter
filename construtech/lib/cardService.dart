@@ -47,12 +47,13 @@ class _cardServiceState extends State<cardService> {
             DrawerHeader(
               child: Container(
                 height: 110,
-                 decoration: const BoxDecoration(
-                 image: DecorationImage(
-                   image: NetworkImage("https://i.imgur.com/SWKzz9n.png", ),
-                   fit: BoxFit.contain,
-                 )
-                ),
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                  image: NetworkImage(
+                    "https://i.imgur.com/SWKzz9n.png",
+                  ),
+                  fit: BoxFit.contain,
+                )),
               ),
             ),
             ListTile(
@@ -103,7 +104,7 @@ class _cardServiceState extends State<cardService> {
                               title: "Pagina de inicio",
                             ))));
               },
-            )
+            ),
           ],
         ),
       ),
@@ -118,12 +119,19 @@ class _cardServiceState extends State<cardService> {
             List<Servicios>? servicio = snapshot.data;
             Widget list;
             if (servicio == null || servicio.isEmpty) {
-              list = const Text("No Hay ninguna cita agendada");
+              list = const Text(
+                "No hay ninguna cita agendada",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Arial',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              );
             } else {
               list = ListView.builder(
                 itemCount: servicio.length,
                 itemBuilder: (context, index) {
-                
                   var s = servicio[index];
                   return Card(
                     child: Padding(
@@ -139,11 +147,9 @@ class _cardServiceState extends State<cardService> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("${s.id}"),
                             Text("${s.nombre} ${s.apellido}"),
                             Text(s.fecha),
                             Text(s.tipoServ),
-                            
                           ],
                         ),
                         Row(
@@ -155,9 +161,13 @@ class _cardServiceState extends State<cardService> {
                                   children: <InlineSpan>[
                                     WidgetSpan(child: Text("Editar"))
                                   ])),
-                              onPressed: () async
-                              {
-                                Navigator.push(context, MaterialPageRoute(builder: ((context)=>const EditService(title: 'Editar servicio'))));
+                              onPressed: () async {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            const EditService(
+                                                title: 'Editar servicio'))));
                               },
                             ),
                             TextButton.icon(
@@ -167,7 +177,10 @@ class _cardServiceState extends State<cardService> {
                                     WidgetSpan(child: Text("Eliminar"))
                                   ])),
                               onPressed: () async {
-                                Navigator.pushReplacement(context,MaterialPageRoute(builder: ( (context) => super.widget)) );
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => super.widget)));
                                 await DatabaseHelper.remove(id: s.id);
                               },
                             )
@@ -175,6 +188,7 @@ class _cardServiceState extends State<cardService> {
                         )
                       ]),
                     ),
+                    
                   );
                 },
               );

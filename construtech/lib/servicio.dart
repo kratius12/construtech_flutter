@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:construtech/cardService.dart';
 import 'package:construtech/databasehelper.dart';
@@ -12,11 +13,7 @@ class ServicioPage extends StatefulWidget {
   State<ServicioPage> createState() => _ServicioPageState();
 }
 
-// ignore: duplicate_ignore
 class _ServicioPageState extends State<ServicioPage> {
-  // ignore: unused_field
-  int? selectedId;
-  Calendaroip calendario = const Calendaroip();
   final _formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final nombreController = TextEditingController();
@@ -26,6 +23,24 @@ class _ServicioPageState extends State<ServicioPage> {
   final telefonoController = TextEditingController();
   final municipioController = TextEditingController();
   final direccionController = TextEditingController();
+  List<String> listaServicios = [
+    "Estuco",
+    "Pintura",
+    "Colocación de puertas o ventanas",
+    "Recubrimiento para muros",
+    "Herreria",
+    "Carpinteria",
+    "Fontaneria"
+  ];
+  List <String> listaMunicipios = [
+    "Medellín",
+    "Bello",
+    "Itagüi",
+    "Envigado",
+    "Copacabana",
+    "Girardota",
+    "Barbosa"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +68,7 @@ class _ServicioPageState extends State<ServicioPage> {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                          padding: const EdgeInsets.only(top: 15),
+                          padding: const EdgeInsets.only(top: 2),
                           child: TextFormField(
                             controller: nombreController,
                             decoration: const InputDecoration(
@@ -126,9 +141,8 @@ class _ServicioPageState extends State<ServicioPage> {
                             DateTime? pickedDate = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
-                              firstDate: DateTime(1950),
+                              firstDate: DateTime.now(),
                               lastDate: DateTime(2300),
-                              
                             );
 
                             if (pickedDate != null) {
@@ -143,10 +157,23 @@ class _ServicioPageState extends State<ServicioPage> {
                       ),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
-                          child: TextFormField(
-                            controller: tipoServController,
+                          child: DropdownButtonFormField(
+                            
+                            items: listaServicios.map((String value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value)
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              tipoServController.text=value!;
+                            },
+                            isDense: true,
+                            isExpanded: true,
+                            icon: const Icon(Icons.arrow_circle_down_sharp),
+                            iconSize: 25,
                             decoration: const InputDecoration(
-                                hintText: '¿Que servicio desea cotizar?',
+                                hintText: 'Seleccione un servicio',
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
                                 fillColor: Color.fromARGB(255, 198, 198, 198),
@@ -159,14 +186,10 @@ class _ServicioPageState extends State<ServicioPage> {
                                       width: 0, style: BorderStyle.none),
                                 ),
                                 filled: true),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "El servicio es requerido";
-                              } else {
-                                return null;
-                              }
-                            },
-                          )),
+                          ),
+                          
+                          
+                          ),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
@@ -214,10 +237,23 @@ class _ServicioPageState extends State<ServicioPage> {
                           )),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
-                          child: TextFormField(
-                            controller: municipioController,
+                          child: DropdownButtonFormField(
+                            
+                            items: listaMunicipios.map((String value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value)
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              municipioController.text=value!;
+                            },
+                            isDense: true,
+                            isExpanded: true,
+                            icon: const Icon(Icons.arrow_circle_down_sharp),
+                            iconSize: 25,
                             decoration: const InputDecoration(
-                                hintText: 'Municipio',
+                                hintText: 'Seleccione un municipio',
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
                                 fillColor: Color.fromARGB(255, 198, 198, 198),
@@ -230,14 +266,10 @@ class _ServicioPageState extends State<ServicioPage> {
                                       width: 0, style: BorderStyle.none),
                                 ),
                                 filled: true),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "El municipio es requerido";
-                              } else {
-                                return null;
-                              }
-                            },
-                          )),
+                          ),
+                          
+                          
+                          ),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
@@ -342,41 +374,5 @@ class _ServicioPageState extends State<ServicioPage> {
         ),
       ),
     );
-  }
-}
-
-class Calendaroip extends StatefulWidget {
-  const Calendaroip({super.key});
-
-  @override
-  State<Calendaroip> createState() => _CalendaroipState();
-}
-
-class _CalendaroipState extends State<Calendaroip> {
-  DateTime? _selectdate;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: _presPacker,
-        child: const Icon(Icons.calendar_today_rounded));
-  }
-
-  void _presPacker() {
-    showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2020),
-            lastDate: DateTime.now())
-        .then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
-      setState(() {
-        _selectdate = pickedDate;
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(" Ha selecionado esta fecha $_selectdate")));
-      });
-    });
   }
 }
