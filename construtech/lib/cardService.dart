@@ -133,6 +133,8 @@ class _cardServiceState extends State<cardService> {
                 itemCount: servicio.length,
                 itemBuilder: (context, index) {
                   var s = servicio[index];
+                   // ignore: unused_local_variable
+                   const int? selectedId = s.id;
                   return Card(
                     child: Padding(
                       padding: const EdgeInsets.all(1.0),
@@ -147,6 +149,7 @@ class _cardServiceState extends State<cardService> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text("${s.id}"),
                             Text("${s.nombre} ${s.apellido}"),
                             Text(s.fecha),
                             Text(s.tipoServ),
@@ -167,7 +170,7 @@ class _cardServiceState extends State<cardService> {
                                     MaterialPageRoute(
                                         builder: ((context) =>
                                             const EditService(
-                                                title: 'Editar servicio'))));
+                                                id: selectedId))));
                               },
                             ),
                             TextButton.icon(

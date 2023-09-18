@@ -26,8 +26,6 @@ class _ServicioPageState extends State<ServicioPage> {
   List<String> listaServicios = [
     "Estuco",
     "Pintura",
-    "Colocación de puertas o ventanas",
-    "Recubrimiento para muros",
     "Herreria",
     "Carpinteria",
     "Fontaneria"

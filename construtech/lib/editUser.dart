@@ -75,14 +75,12 @@ class _EditUser extends State<EditUser> {
                                 return "El correo es requerido";
                               } else if (!regExp.hasMatch(value)) {
                                 return "Correo invalido";
-                              } else if (value.isEmpty) {
-                                return null;
                               } else {
                                 return null;
                               }
                             },
                           )),
-                          Padding(
+                      Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
                             controller: newCorreoController,
@@ -108,20 +106,15 @@ class _EditUser extends State<EditUser> {
                                 return "El correo es requerido";
                               } else if (!regExp.hasMatch(value)) {
                                 return "Correo invalido";
-                              } else if (value.isEmpty) {
-                                return null;
                               } else {
                                 return null;
                               }
                             },
                           )),
-                           Padding(
-                          padding: const EdgeInsets.only(top: 15),
+                      Padding(
+                          padding: const EdgeInsets.only(top: 30),
                           child: TextFormField(
                             controller: nombreController,
-                            onChanged: (value) {
-                              setState(() {});
-                            },
                             decoration: const InputDecoration(
                                 hintText: 'Nombre',
                                 hintStyle:
@@ -129,7 +122,7 @@ class _EditUser extends State<EditUser> {
                                 fillColor: Color.fromARGB(255, 198, 198, 198),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
+                                      width: 0, style: BorderStyle.solid),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -138,18 +131,18 @@ class _EditUser extends State<EditUser> {
                                 filled: true),
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return "El nombre es requerido";
-                              } else {
-                                return null;
+                                return 'Por favor ingrese su nombre';
                               }
+                              return null;
                             },
-                          )), Padding(
+                            onSaved: (value) {
+                              setState(() {});
+                            },
+                          )),
+                      Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
                             controller: apellidoController,
-                            onChanged: (value) {
-                              setState(() {});
-                            },
                             decoration: const InputDecoration(
                                 hintText: 'Apellidos',
                                 hintStyle:
@@ -164,15 +157,13 @@ class _EditUser extends State<EditUser> {
                                       width: 0, style: BorderStyle.none),
                                 ),
                                 filled: true),
+                            // ignore: body_might_complete_normally_nullable
                             validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Los apellidos son requeridos";
-                              } else {
-                                return null;
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor digite su apellido';
                               }
                             },
                           )),
-                      
                       Padding(
                           padding: const EdgeInsets.symmetric(vertical: 30),
                           child: SizedBox(
@@ -181,19 +172,19 @@ class _EditUser extends State<EditUser> {
                             child: ElevatedButton(
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
-                                    await DatabaseHelper.updateUser(
-                                            email: emailController.text,
-                                            newEmail: newCorreoController.text,
-                                            nombre: nombreController.text,
-                                            apellidos: apellidoController
-                                            );
-                                        // ignore: use_build_context_synchronously
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const MiPerfil(title: "mi perfil",)));                                        
-                                  }
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MiPerfil(
+                                                  title: "mi perfil",
+                                                )));
+                                  } await DatabaseHelper.updateUser(
+                                        email: emailController.text,
+                                        newEmail: newCorreoController.text,
+                                        nombre: nombreController.text,
+                                        apellidos: apellidoController.text);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:

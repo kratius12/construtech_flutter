@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:construtech/databasehelper.dart';
 import 'package:construtech/login.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 class _RegisterPageState extends State<RegisterPage> {
   SinginCharacter? _sex = SinginCharacter.femenino;
@@ -278,18 +280,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                     backgroundColor:
                                         const Color.fromARGB(255, 12, 195, 106),
                                   ));
-                                }
-                                if (_formKey.currentState!.validate()) {
+                                  Mailer(email: emailController.text);
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => const LoginPage(
                                               title: "Login ")));
-                                  await DatabaseHelper.register(Usuarios(
-                                      nombre: nombreController.text,
-                                      apellido: apellidoController.text,
-                                      email: emailController.text,
-                                      password: passwordController.text));
+                                  await DatabaseHelper.instance.register(
+                                      Usuarios(
+                                          nombre: nombreController.text,
+                                          apellido: apellidoController.text,
+                                          email: emailController.text,
+                                          password: passwordController.text));
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -319,4 +321,29 @@ class RegisterPage extends StatefulWidget {
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
+}
+
+// ignore: non_constant_identifier_names
+Mailer({required email}) async {
+  String username = 'yeisonpl2017@gmail.com'; //Aqui iria su correo personal
+  String password = 'bbiuqpqtolubbmym'; //Contraseña de aplicaciones
+
+  final smtpServer = gmail(username, password);
+
+  final message = Message()
+    ..from = Address(username, 'Constru-tech')
+    ..recipients.add(email) //Correo al cual se enviara el mensaje
+    ..subject =
+        'BIENVENIDO, te damos las gracias por registrarte a constru-tech ${DateTime.now()}' //Asunto del correo
+    ..html = "Tu correo ha sido verificado correctamente."; //Cuerpo del correo
+
+  var connection = PersistentConnection(smtpServer);
+
+  // Send the first message
+  await connection.send(message);
+
+  // send the equivalent message
+
+  // close the connection
+  await connection.close();
 }

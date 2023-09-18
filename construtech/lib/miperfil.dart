@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:construtech/carObra.dart';
 import 'package:construtech/cardService.dart';
 import 'package:construtech/changePass.dart';
-
 import 'package:construtech/editUser.dart';
 import 'package:construtech/main.dart';
 
@@ -127,61 +126,4 @@ class _MiPerfil extends State<MiPerfil> {
         ),     
     );
 }
-}
-
-class Bottom1 extends StatelessWidget {
-  const Bottom1({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const SizedBox(width: 16),
-          FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                           const ChangePass(title: 'Cambiar constraseña',)
-                          ));
-            },
-            label: const Text('Cambiar contraseña'),
-            icon: const Icon(Icons.add),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-
-class Bottom2 extends StatelessWidget {
-  const Bottom2({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const SizedBox(width: 16),
-          FloatingActionButton.extended(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const EditUser(title: 'editar usuario',)
-                          ));
-            },
-            label: const Text('Cambiar información de usuario'),
-            icon: const Icon(Icons.abc_outlined),
-          ),
-        ],
-      ),
-    );
-  }
 }

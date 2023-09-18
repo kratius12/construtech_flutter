@@ -119,7 +119,7 @@ class DatabaseHelper {
   }
 
 //Metodos para la gestión de base de datos en la tabla de usuarios
-  Future<bool> login ({required String email,required String password}) async {
+  Future<bool> login({required String email, required String password}) async {
     final db = await database;
     final result = await db.query(
       'usuarios',
@@ -129,9 +129,10 @@ class DatabaseHelper {
 
     return result.isNotEmpty;
   }
-    static Future<List<Usuarios>> getUsuarios() async {
+
+  static Future<List<Usuarios>> getUsuarios() async {
     Database db = await instance.database;
-    var  usuarios = await db.query('usuarios');
+    var usuarios = await db.query('usuarios');
     // ignore: non_constant_identifier_names
     List<Usuarios> UsuariosList = usuarios.isNotEmpty
         ? usuarios.map((c) => Usuarios.fromMap(c)).toList()
@@ -139,13 +140,17 @@ class DatabaseHelper {
     return UsuariosList;
   }
 
-
-  static Future<int> register(Usuarios usuarios) async {
+  Future<Object> register(Usuarios usuarios) async {
     Database db = await instance.database;
-    return await db.insert('usuarios', usuarios.toMap());
+    try {
+      return await db.insert('usuarios', usuarios.toMap());
+    } catch (e) {
+      return e;
+    }
   }
 
- static Future<int> updatePassword({required String email, required String newPassword}) async {
+  static Future<int> updatePassword(
+      {required String email, required String newPassword}) async {
     Database db = await instance.database;
     return await db.update(
       'usuarios',
@@ -155,17 +160,19 @@ class DatabaseHelper {
     );
   }
 
-  static Future<int>updateUser({ required nombre, required apellidos, required email, required newEmail}) async{
+  static Future<int> updateUser(
+      {required nombre,
+      required apellidos,
+      required email,
+      required newEmail}) async {
     Database db = await instance.database;
-    return await db.update('usuarios', 
-    {'nombre':nombre, 'apellidos':apellidos, 'email':newEmail},
-    where: 'email = ?',
-    whereArgs: [email],
+    return await db.update(
+      'usuarios',
+      {'nombre': nombre, 'apellido': apellidos, 'email': newEmail},
+      where: 'email = ?',
+      whereArgs: [email],
     );
   }
-
-
-
 
   //Metodos de gestion de base de datos con la tabla de servicios.
   static Future<List<Servicios>> getServices() async {
@@ -182,18 +189,25 @@ class DatabaseHelper {
     Database db = await instance.database;
     return await db.insert('servicios', servicios.toMap());
   }
-  static Future<int> remove({required id}) async{
+
+  static Future<int> remove({required id}) async {
     Database db = await instance.database;
     return await db.delete('servicios', where: 'id = ?', whereArgs: [id]);
   }
-  static Future<int> update({required id, required nombre, required apellido, required direccion, required fecha, required municipio, required telefono, required tipoServ}) async{
-    Database db = await instance.database;
-   return await db.update(
-      'servicios',
-      {'nombre': nombre, 'apellido': apellido, 'direccion':direccion,'fecha':fecha, 'municipio':municipio,'telefono':telefono,'tipoServ':tipoServ},
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
 
-} 
+  Future update(
+      {id,
+      nombre,
+      apellido,
+      fecha,
+      tipoServ,
+      telefono,
+      municipio,
+      direccion}) async {
+    final db = await database;
+    int dbupdate = await db.rawUpdate(
+        'UPDATE servicios SET nombre = ?, apellido =?, FechaP = ?, tipoServ = ?, telefono = ?, municipio = ?, direccion = ? WHERE id = ?',
+        [nombre, apellido, fecha, tipoServ, telefono, municipio, direccion, id]);
+    return dbupdate;
+  }
+}

@@ -1,13 +1,12 @@
 
+import 'package:construtech/databasehelper.dart';
 import 'package:flutter/material.dart';
 import 'package:construtech/cardService.dart';
-import 'package:construtech/databasehelper.dart';
 import 'package:intl/intl.dart';
 
 class EditService extends StatefulWidget {
-  const EditService({super.key, required this.title});
-
-  final String title;
+  const EditService({super.key, required this.id});
+  final int? id;
 
   @override
   State<EditService> createState() => _EditService();
@@ -15,6 +14,7 @@ class EditService extends StatefulWidget {
 
 class _EditService extends State<EditService> {
   final _formKey = GlobalKey<FormState>();
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final nombreController = TextEditingController();
   final apellidosController = TextEditingController();
@@ -347,16 +347,15 @@ class _EditService extends State<EditService> {
                                               const cardService()),
                                     );
                                   }
-                                  await DatabaseHelper.update(
-                                    
+                                  await DatabaseHelper.instance.update(
+                                      id:widget.id,                                    
                                       nombre: nombreController.text,
                                       apellido: apellidosController.text,
                                       direccion: direccionController.text,
                                       fecha: fechaController.text,
                                       municipio: municipioController.text,
                                       telefono: telefonoController.text,
-                                      tipoServ: tipoServController.text, id: null,
-                                    
+                                      tipoServ: tipoServController.text,
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
