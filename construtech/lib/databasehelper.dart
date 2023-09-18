@@ -142,11 +142,7 @@ class DatabaseHelper {
 
   Future<Object> register(Usuarios usuarios) async {
     Database db = await instance.database;
-    try {
       return await db.insert('usuarios', usuarios.toMap());
-    } catch (e) {
-      return e;
-    }
   }
 
   static Future<int> updatePassword(
@@ -207,17 +203,25 @@ class DatabaseHelper {
     final db = await database;
     int dbupdate = await db.rawUpdate(
         'UPDATE servicios SET nombre = ?, apellido =?, fecha = ?, tipoServ = ?, telefono = ?, municipio = ?, direccion = ? WHERE id = ?',
-        [nombre, apellido, fecha, tipoServ, telefono, municipio, direccion, id]);
+        [
+          nombre,
+          apellido,
+          fecha,
+          tipoServ,
+          telefono,
+          municipio,
+          direccion,
+          id
+        ]);
     return dbupdate;
   }
-  Future getService({
-    id
-  }) async{
-    final db = await database;
-    List<Map<String, Object?>> dbselect = await db.query(
-      'select * from servicios where id=?',
-      whereArgs: [id],
-      
+  Future<List<Map<String, Object?>>> oneService({id})async{
+    final db = await instance.database;
+    var dbService = await db.rawQuery(
+      'select * from service where id=?',[
+        id
+      ]
     );
+    return dbService ;
   }
 }

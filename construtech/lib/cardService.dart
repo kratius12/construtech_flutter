@@ -134,7 +134,6 @@ class _cardServiceState extends State<cardService> {
                 itemCount: servicio.length,
                 itemBuilder: (context, index) {
                   var s = servicio[index];
-                  // ignore: unused_local_variable
                   int? selectedId = s.id;
                   return Card(
                     child: Padding(
@@ -150,7 +149,6 @@ class _cardServiceState extends State<cardService> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("${s.id}"),
                             Text("${s.nombre} ${s.apellido}"),
                             Text(s.fecha),
                             Text(s.tipoServ),

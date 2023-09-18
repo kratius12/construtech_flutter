@@ -244,7 +244,62 @@ class _RegisterPageState extends State<RegisterPage> {
                           height: 45,
                           child: ElevatedButton(
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
+                                try {
+                                  await DatabaseHelper.instance.register(
+                                      Usuarios(
+                                          nombre: nombreController.text,
+                                          apellido: apellidoController.text,
+                                          email: emailController.text,
+                                          password: passwordController.text));
+                                  if (_formKey.currentState!.validate()) {
+                                    // ignore: use_build_context_synchronously
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.check_circle,
+                                            color: Color.fromARGB(
+                                                255, 198, 198, 198),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "Usuario registrado con exito!",
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 198, 198, 198),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      duration:
+                                          const Duration(milliseconds: 2000),
+                                      width: 300,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0, vertical: 10),
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(3.0),
+                                      ),
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 12, 195, 106),
+                                    ));
+                                    Mailer(email: emailController.text, nombre: nombreController.text);
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LoginPage(
+                                                    title: "Login ")));
+                                  }
+                                } catch (e) {
+                                  // ignore: use_build_context_synchronously
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
                                     content: const Row(
@@ -252,7 +307,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           MainAxisAlignment.start,
                                       children: <Widget>[
                                         Icon(
-                                          Icons.check_circle,
+                                          Icons.cancel,
                                           color: Color.fromARGB(
                                               255, 198, 198, 198),
                                         ),
@@ -260,7 +315,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           width: 5,
                                         ),
                                         Text(
-                                          "Usuario registrado con exito!",
+                                          "El usuario no puede ser registrado",
                                           style: TextStyle(
                                             color: Color.fromARGB(
                                                 255, 198, 198, 198),
@@ -278,20 +333,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       borderRadius: BorderRadius.circular(3.0),
                                     ),
                                     backgroundColor:
-                                        const Color.fromARGB(255, 12, 195, 106),
+                                        const Color.fromARGB(255, 255, 0, 0),
                                   ));
-                                  Mailer(email: emailController.text);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const LoginPage(
-                                              title: "Login ")));
-                                  await DatabaseHelper.instance.register(
-                                      Usuarios(
-                                          nombre: nombreController.text,
-                                          apellido: apellidoController.text,
-                                          email: emailController.text,
-                                          password: passwordController.text));
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -324,7 +367,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 // ignore: non_constant_identifier_names
-Mailer({required email}) async {
+Mailer({required email, required nombre}) async {
   String username = 'yeisonpl2017@gmail.com'; //Aqui iria su correo personal
   String password = 'bbiuqpqtolubbmym'; //Contraseña de aplicaciones
 
@@ -334,7 +377,7 @@ Mailer({required email}) async {
     ..from = Address(username, 'Constru-tech')
     ..recipients.add(email) //Correo al cual se enviara el mensaje
     ..subject =
-        'BIENVENIDO, te damos las gracias por registrarte a constru-tech ${DateTime.now()}' //Asunto del correo
+        'BIENVENIDO, $nombre te damos las gracias por registrarte a constru-tech ${DateTime.now()}' //Asunto del correo
     ..html = "Tu correo ha sido verificado correctamente."; //Cuerpo del correo
 
   var connection = PersistentConnection(smtpServer);

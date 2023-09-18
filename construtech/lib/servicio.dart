@@ -1,8 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:construtech/cardService.dart';
 import 'package:construtech/databasehelper.dart';
 import 'package:intl/intl.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 
 class ServicioPage extends StatefulWidget {
   const ServicioPage({super.key, required this.title});
@@ -23,6 +24,7 @@ class _ServicioPageState extends State<ServicioPage> {
   final telefonoController = TextEditingController();
   final municipioController = TextEditingController();
   final direccionController = TextEditingController();
+  final emailController = TextEditingController();
   List<String> listaServicios = [
     "Estuco",
     "Pintura",
@@ -30,7 +32,7 @@ class _ServicioPageState extends State<ServicioPage> {
     "Carpinteria",
     "Fontaneria"
   ];
-  List <String> listaMunicipios = [
+  List<String> listaMunicipios = [
     "Medellín",
     "Bello",
     "Itagüi",
@@ -65,6 +67,37 @@ class _ServicioPageState extends State<ServicioPage> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: TextFormField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                              hintText: 'Email',
+                              hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                              fillColor: Color.fromARGB(255, 198, 198, 198),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              filled: true),
+                          validator: (value) {
+                            String pattern =
+                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                            RegExp regExp = RegExp(pattern);
+                            if (value!.isEmpty) {
+                              return "El correo es requerido";
+                            } else if (!regExp.hasMatch(value)) {
+                              return "Correo invalido";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                      ),
                       Padding(
                           padding: const EdgeInsets.only(top: 2),
                           child: TextFormField(
@@ -154,40 +187,34 @@ class _ServicioPageState extends State<ServicioPage> {
                         ),
                       ),
                       Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: DropdownButtonFormField(
-                            
-                            items: listaServicios.map((String value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value)
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              tipoServController.text=value!;
-                            },
-                            isDense: true,
-                            isExpanded: true,
-                            icon: const Icon(Icons.arrow_circle_down_sharp),
-                            iconSize: 25,
-                            decoration: const InputDecoration(
-                                hintText: 'Seleccione un servicio',
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                fillColor: Color.fromARGB(255, 198, 198, 198),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                filled: true),
-                          ),
-                          
-                          
-                          ),
+                        padding: const EdgeInsets.only(top: 15),
+                        child: DropdownButtonFormField(
+                          items: listaServicios.map((String value) {
+                            return DropdownMenuItem(
+                                value: value, child: Text(value));
+                          }).toList(),
+                          onChanged: (value) {
+                            tipoServController.text = value!;
+                          },
+                          isDense: true,
+                          isExpanded: true,
+                          icon: const Icon(Icons.arrow_circle_down_sharp),
+                          iconSize: 25,
+                          decoration: const InputDecoration(
+                              hintText: 'Seleccione un servicio',
+                              hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                              fillColor: Color.fromARGB(255, 198, 198, 198),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              filled: true),
+                        ),
+                      ),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
@@ -234,40 +261,34 @@ class _ServicioPageState extends State<ServicioPage> {
                             enabled: false,
                           )),
                       Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: DropdownButtonFormField(
-                            
-                            items: listaMunicipios.map((String value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value)
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              municipioController.text=value!;
-                            },
-                            isDense: true,
-                            isExpanded: true,
-                            icon: const Icon(Icons.arrow_circle_down_sharp),
-                            iconSize: 25,
-                            decoration: const InputDecoration(
-                                hintText: 'Seleccione un municipio',
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                fillColor: Color.fromARGB(255, 198, 198, 198),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                filled: true),
-                          ),
-                          
-                          
-                          ),
+                        padding: const EdgeInsets.only(top: 15),
+                        child: DropdownButtonFormField(
+                          items: listaMunicipios.map((String value) {
+                            return DropdownMenuItem(
+                                value: value, child: Text(value));
+                          }).toList(),
+                          onChanged: (value) {
+                            municipioController.text = value!;
+                          },
+                          isDense: true,
+                          isExpanded: true,
+                          icon: const Icon(Icons.arrow_circle_down_sharp),
+                          iconSize: 25,
+                          decoration: const InputDecoration(
+                              hintText: 'Seleccione un municipio',
+                              hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                              fillColor: Color.fromARGB(255, 198, 198, 198),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              filled: true),
+                        ),
+                      ),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
@@ -356,6 +377,11 @@ class _ServicioPageState extends State<ServicioPage> {
                                       tipoServ: tipoServController.text,
                                     ),
                                   );
+                                  Mailer(
+                                      email: emailController.text,
+                                      nombre: nombreController.text,
+                                      tipoServ: tipoServController.text,
+                                      fecha: fechaController.text);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
@@ -373,4 +399,33 @@ class _ServicioPageState extends State<ServicioPage> {
       ),
     );
   }
+}
+
+// ignore: non_constant_identifier_names
+Mailer(
+    {required email,
+    required nombre,
+    required tipoServ,
+    required fecha}) async {
+  String username = 'yeisonpl2017@gmail.com'; //Aqui iria su correo personal
+  String password = 'bbiuqpqtolubbmym'; //Contraseña de aplicaciones
+
+  final smtpServer = gmail(username, password);
+
+  final message = Message()
+    ..from = Address(username, 'Constru-tech')
+    ..recipients.add(email) //Correo al cual se enviara el mensaje
+    ..subject = 'Hola $nombre' //Asunto del correo
+    ..html =
+        "Confirmamos tu cita de $tipoServ, el dia $fecha"; //Cuerpo del correo
+
+  var connection = PersistentConnection(smtpServer);
+
+  // Send the first message
+  await connection.send(message);
+
+  // send the equivalent message
+
+  // close the connection
+  await connection.close();
 }

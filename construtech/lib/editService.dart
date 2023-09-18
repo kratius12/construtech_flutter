@@ -1,4 +1,3 @@
-
 import 'package:construtech/databasehelper.dart';
 import 'package:flutter/material.dart';
 import 'package:construtech/cardService.dart';
@@ -30,7 +29,7 @@ class _EditService extends State<EditService> {
     "Carpinteria",
     "Fontaneria"
   ];
-  List <String> listaMunicipios = [
+  List<String> listaMunicipios = [
     "Medellín",
     "Bello",
     "Itagüi",
@@ -47,8 +46,8 @@ class _EditService extends State<EditService> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).shadowColor,
         title: Text(
-          "Solicitar cita ${widget.id}",
-          style: TextStyle(color: Colors.white),
+          "editar cita ${widget.id}",
+          style: const TextStyle(color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(
@@ -154,40 +153,34 @@ class _EditService extends State<EditService> {
                         ),
                       ),
                       Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: DropdownButtonFormField(
-                            
-                            items: listaServicios.map((String value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value)
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              tipoServController.text=value!;
-                            },
-                            isDense: true,
-                            isExpanded: true,
-                            icon: const Icon(Icons.arrow_circle_down_sharp),
-                            iconSize: 25,
-                            decoration: const InputDecoration(
-                                hintText: 'Seleccione un servicio',
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                fillColor: Color.fromARGB(255, 198, 198, 198),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                filled: true),
-                          ),
-                          
-                          
-                          ),
+                        padding: const EdgeInsets.only(top: 15),
+                        child: DropdownButtonFormField(
+                          items: listaServicios.map((String value) {
+                            return DropdownMenuItem(
+                                value: value, child: Text(value));
+                          }).toList(),
+                          onChanged: (value) {
+                            tipoServController.text = value!;
+                          },
+                          isDense: true,
+                          isExpanded: true,
+                          icon: const Icon(Icons.arrow_circle_down_sharp),
+                          iconSize: 25,
+                          decoration: const InputDecoration(
+                              hintText: 'Seleccione un servicio',
+                              hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                              fillColor: Color.fromARGB(255, 198, 198, 198),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              filled: true),
+                        ),
+                      ),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
@@ -234,40 +227,34 @@ class _EditService extends State<EditService> {
                             enabled: false,
                           )),
                       Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: DropdownButtonFormField(
-                            
-                            items: listaMunicipios.map((String value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value)
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              municipioController.text=value!;
-                            },
-                            isDense: true,
-                            isExpanded: true,
-                            icon: const Icon(Icons.arrow_circle_down_sharp),
-                            iconSize: 25,
-                            decoration: const InputDecoration(
-                                hintText: 'Seleccione un municipio',
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                fillColor: Color.fromARGB(255, 198, 198, 198),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                filled: true),
-                          ),
-                          
-                          
-                          ),
+                        padding: const EdgeInsets.only(top: 15),
+                        child: DropdownButtonFormField(
+                          items: listaMunicipios.map((String value) {
+                            return DropdownMenuItem(
+                                value: value, child: Text(value));
+                          }).toList(),
+                          onChanged: (value) {
+                            municipioController.text = value!;
+                          },
+                          isDense: true,
+                          isExpanded: true,
+                          icon: const Icon(Icons.arrow_circle_down_sharp),
+                          iconSize: 25,
+                          decoration: const InputDecoration(
+                              hintText: 'Seleccione un municipio',
+                              hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                              fillColor: Color.fromARGB(255, 198, 198, 198),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              filled: true),
+                        ),
+                      ),
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
@@ -346,15 +333,14 @@ class _EditService extends State<EditService> {
                                     );
                                   }
                                   await DatabaseHelper.instance.update(
-                                                                        
-                                      nombre: nombreController.text,
-                                      apellido: apellidosController.text,
-                                      direccion: direccionController.text,
-                                      fecha: fechaController.text,
-                                      municipio: municipioController.text,
-                                      telefono: telefonoController.text,
-                                      tipoServ: tipoServController.text,
-                                      id:widget.id,  
+                                    nombre: nombreController.text,
+                                    apellido: apellidosController.text,
+                                    direccion: direccionController.text,
+                                    fecha: fechaController.text,
+                                    municipio: municipioController.text,
+                                    telefono: telefonoController.text,
+                                    tipoServ: tipoServController.text,
+                                    id: widget.id,
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
