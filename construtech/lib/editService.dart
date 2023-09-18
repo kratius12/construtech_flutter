@@ -48,8 +48,8 @@ class _EditService extends State<EditService> {
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).shadowColor,
-        title: const Text(
-          "Solicitar cita",
+        title: Text(
+          "Solicitar cita ${widget.id}",
           style: TextStyle(color: Colors.white),
         ),
       ),

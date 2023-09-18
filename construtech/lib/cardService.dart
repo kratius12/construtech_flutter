@@ -134,7 +134,7 @@ class _cardServiceState extends State<cardService> {
                 itemBuilder: (context, index) {
                   var s = servicio[index];
                    // ignore: unused_local_variable
-                   const int? selectedId = s.id;
+                    int? selectedId = s.id;
                   return Card(
                     child: Padding(
                       padding: const EdgeInsets.all(1.0),
@@ -169,7 +169,7 @@ class _cardServiceState extends State<cardService> {
                                     context,
                                     MaterialPageRoute(
                                         builder: ((context) =>
-                                            const EditService(
+                                             EditService(
                                                 id: selectedId))));
                               },
                             ),
