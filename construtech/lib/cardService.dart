@@ -1,4 +1,5 @@
 // ignore_for_file: file_names
+import 'package:construtech/detailsService.dart';
 import 'package:flutter/material.dart';
 import 'package:construtech/carObra.dart';
 import 'package:construtech/databasehelper.dart';
@@ -133,8 +134,8 @@ class _cardServiceState extends State<cardService> {
                 itemCount: servicio.length,
                 itemBuilder: (context, index) {
                   var s = servicio[index];
-                   // ignore: unused_local_variable
-                    int? selectedId = s.id;
+                  // ignore: unused_local_variable
+                  int? selectedId = s.id;
                   return Card(
                     child: Padding(
                       padding: const EdgeInsets.all(1.0),
@@ -158,40 +159,38 @@ class _cardServiceState extends State<cardService> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
-                            TextButton.icon(
-                              icon: const Icon(Icons.calendar_month),
-                              label: const Text.rich(TextSpan(
-                                  children: <InlineSpan>[
-                                    WidgetSpan(child: Text("Editar"))
-                                  ])),
-                              onPressed: () async {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                             EditService(
-                                                id: selectedId))));
-                              },
-                            ),
-                            TextButton.icon(
-                              icon: const Icon(Icons.cancel),
-                              label: const Text.rich(TextSpan(
-                                  children: <InlineSpan>[
-                                    WidgetSpan(child: Text("Eliminar"))
-                                  ])),
-                              onPressed: () async {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) => super.widget)));
-                                await DatabaseHelper.remove(id: s.id);
-                              },
-                            )
+                            IconButton(
+                                onPressed: () async {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              EditService(id: selectedId))));
+                                },
+                                icon: const Icon(Icons.calendar_month)),
+                            IconButton(
+                                onPressed: () async {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              super.widget)));
+                                  await DatabaseHelper.remove(id: s.id);
+                                },
+                                icon: const Icon(Icons.cancel)),
+                            IconButton(
+                                onPressed: () async {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              DetailService(id: selectedId,))));
+                                },
+                                icon: const Icon(Icons.remove_red_eye))
                           ],
                         )
                       ]),
                     ),
-                    
                   );
                 },
               );

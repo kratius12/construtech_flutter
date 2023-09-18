@@ -26,8 +26,6 @@ class _EditService extends State<EditService> {
   List<String> listaServicios = [
     "Estuco",
     "Pintura",
-    "Colocación de puertas o ventanas",
-    "Recubrimiento para muros",
     "Herreria",
     "Carpinteria",
     "Fontaneria"
@@ -348,7 +346,7 @@ class _EditService extends State<EditService> {
                                     );
                                   }
                                   await DatabaseHelper.instance.update(
-                                      id:widget.id,                                    
+                                                                        
                                       nombre: nombreController.text,
                                       apellido: apellidosController.text,
                                       direccion: direccionController.text,
@@ -356,6 +354,7 @@ class _EditService extends State<EditService> {
                                       municipio: municipioController.text,
                                       telefono: telefonoController.text,
                                       tipoServ: tipoServController.text,
+                                      id:widget.id,  
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(

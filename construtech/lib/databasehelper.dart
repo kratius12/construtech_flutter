@@ -206,8 +206,18 @@ class DatabaseHelper {
       direccion}) async {
     final db = await database;
     int dbupdate = await db.rawUpdate(
-        'UPDATE servicios SET nombre = ?, apellido =?, FechaP = ?, tipoServ = ?, telefono = ?, municipio = ?, direccion = ? WHERE id = ?',
+        'UPDATE servicios SET nombre = ?, apellido =?, fecha = ?, tipoServ = ?, telefono = ?, municipio = ?, direccion = ? WHERE id = ?',
         [nombre, apellido, fecha, tipoServ, telefono, municipio, direccion, id]);
     return dbupdate;
+  }
+  Future getService({
+    id
+  }) async{
+    final db = await database;
+    List<Map<String, Object?>> dbselect = await db.query(
+      'select * from servicios where id=?',
+      whereArgs: [id],
+      
+    );
   }
 }
