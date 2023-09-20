@@ -2,8 +2,7 @@ import 'package:construtechh/databasehelper.dart';
 import 'package:flutter/material.dart';
 import 'package:construtechh/cardService.dart';
 import 'package:intl/intl.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server/gmail.dart';
+
 
 class EditService extends StatefulWidget {
   const EditService({
@@ -85,37 +84,7 @@ class _EditService extends State<EditService> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: TextFormField(
-                          controller: emailController,
-                          decoration: const InputDecoration(
-                              hintText: 'Email',
-                              hintStyle: TextStyle(fontWeight: FontWeight.w600),
-                              fillColor: Color.fromARGB(255, 198, 198, 198),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 0, style: BorderStyle.none),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 0, style: BorderStyle.none),
-                              ),
-                              filled: true),
-                          validator: (value) {
-                            String pattern =
-                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                            RegExp regExp = RegExp(pattern);
-                            if (value!.isEmpty) {
-                              return "El correo es requerido";
-                            } else if (!regExp.hasMatch(value)) {
-                              return "Correo invalido";
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                      ),
+                      
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
@@ -399,11 +368,7 @@ class _EditService extends State<EditService> {
                                               const cardService()),
                                     );
                                   }
-                                  Mailer(
-                                      email: emailController.text,
-                                      fecha: fechaController.text,
-                                      nombre: nombreController.text,
-                                      tipoServ: tipoServController);
+                                  
                                   await DatabaseHelper.instance.update(
                                     nombre: nombreController.text,
                                     apellido: apellidosController.text,
@@ -431,33 +396,4 @@ class _EditService extends State<EditService> {
       ),
     );
   }
-}
-
-// ignore: non_constant_identifier_names
-Mailer(
-    {required email,
-    required nombre,
-    required tipoServ,
-    required fecha}) async {
-  String username = 'yeisonpl2017@gmail.com'; //Aqui iria su correo personal
-  String password = 'bbiuqpqtolubbmym'; //Contraseña de aplicaciones
-
-  final smtpServer = gmail(username, password);
-
-  final message = Message()
-    ..from = Address(username, 'Constru-tech')
-    ..recipients.add(email) //Correo al cual se enviara el mensaje
-    ..subject = 'Hola $nombre' //Asunto del correo
-    ..html =
-        "Actualizamos tu cita!! \n servicio: $tipoServ, el dia: $fecha"; //Cuerpo del correo
-
-  var connection = PersistentConnection(smtpServer);
-
-  // Send the first message
-  await connection.send(message);
-
-  // send the equivalent message
-
-  // close the connection
-  await connection.close();
 }
