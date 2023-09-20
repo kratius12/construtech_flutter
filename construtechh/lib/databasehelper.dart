@@ -203,7 +203,7 @@ class DatabaseHelper {
       direccion}) async {
     final db = await database;
     int dbupdate = await db.rawUpdate(
-        'UPDATE servicios SET email=? nombre = ?, apellido =?, fecha = ?, tipoServ = ?, telefono = ?, municipio = ?, direccion = ? WHERE id = ?',
+        'UPDATE servicios SET  nombre = ?, apellido =?, fecha = ?, tipoServ = ?, telefono = ?, municipio = ?, direccion = ? WHERE id = ?',
         [
           nombre,
           apellido,

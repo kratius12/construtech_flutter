@@ -38,7 +38,7 @@ class _EditService extends State<EditService> {
   var nombreController = TextEditingController();
   var apellidosController = TextEditingController();
   var fechaController = TextEditingController();
-  var tipoServController = TextEditingController();
+  late String tipoServController ;
   var telefonoController = TextEditingController();
   var municipioController = TextEditingController();
   var direccionController = TextEditingController();
@@ -210,12 +210,16 @@ class _EditService extends State<EditService> {
                       Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: DropdownButtonFormField(
+                          value: widget.tipoServ,
                           items: listaServicios.map((String tipoServ) {
                             return DropdownMenuItem(
                                 value: tipoServ, child: Text(tipoServ));
                           }).toList(),
                           onChanged: (value) {
-                            tipoServController.text = value!;
+                            tipoServController = value!;
+                          },
+                          onSaved: (newValue) {
+                            tipoServController = widget.tipoServ;
                           },
                           isDense: true,
                           isExpanded: true,
@@ -285,6 +289,7 @@ class _EditService extends State<EditService> {
                       Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: DropdownButtonFormField(
+                        value: widget.municipio,
                           items: listaMunicipios.map((String value) {
                             return DropdownMenuItem(
                                 value: value, child: Text(value));
@@ -398,7 +403,7 @@ class _EditService extends State<EditService> {
                                       email: emailController.text,
                                       fecha: fechaController.text,
                                       nombre: nombreController.text,
-                                      tipoServ: tipoServController.text);
+                                      tipoServ: tipoServController);
                                   await DatabaseHelper.instance.update(
                                     nombre: nombreController.text,
                                     apellido: apellidosController.text,
@@ -406,7 +411,7 @@ class _EditService extends State<EditService> {
                                     fecha: fechaController.text,
                                     municipio: municipioController.text,
                                     telefono: telefonoController.text,
-                                    tipoServ: tipoServController.text,
+                                    tipoServ: tipoServController,
                                     id: widget.id,
                                   );
                                 },
@@ -428,6 +433,7 @@ class _EditService extends State<EditService> {
   }
 }
 
+// ignore: non_constant_identifier_names
 Mailer(
     {required email,
     required nombre,
