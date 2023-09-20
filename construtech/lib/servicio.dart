@@ -68,7 +68,7 @@ class _ServicioPageState extends State<ServicioPage> {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(top: 15),
+                        padding: const EdgeInsets.only(top: 2),
                         child: TextFormField(
                           controller: emailController,
                           decoration: const InputDecoration(
@@ -99,7 +99,7 @@ class _ServicioPageState extends State<ServicioPage> {
                         ),
                       ),
                       Padding(
-                          padding: const EdgeInsets.only(top: 2),
+                          padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
                             controller: nombreController,
                             decoration: const InputDecoration(
@@ -331,7 +331,7 @@ class _ServicioPageState extends State<ServicioPage> {
                                         children: <Widget>[
                                           Icon(
                                             Icons.check_circle,
-                                            color: Colors.purple,
+                                            color: Colors.white,
                                           ),
                                           SizedBox(
                                             width: 5,
@@ -375,6 +375,7 @@ class _ServicioPageState extends State<ServicioPage> {
                                       municipio: municipioController.text,
                                       telefono: telefonoController.text,
                                       tipoServ: tipoServController.text,
+
                                     ),
                                   );
                                   Mailer(
@@ -389,7 +390,7 @@ class _ServicioPageState extends State<ServicioPage> {
                                   foregroundColor:
                                       Colors.white, // foreground (text) color
                                 ),
-                                child: const Text('Solicitar')),
+                                child: const Text('Guardar')),
                           )),
                     ],
                   ))

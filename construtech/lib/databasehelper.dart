@@ -90,7 +90,7 @@ class DatabaseHelper {
     String path = join(documentsDirectory.path, 'constru_tech.db');
     return await openDatabase(
       path,
-      version: 3,
+      version: 5,
       onCreate: _onCreate,
     );
   }
@@ -116,6 +116,7 @@ class DatabaseHelper {
     password TEXT NOT NULL
   )
   ''');
+
   }
 
 //Metodos para la gestión de base de datos en la tabla de usuarios
@@ -142,7 +143,7 @@ class DatabaseHelper {
 
   Future<Object> register(Usuarios usuarios) async {
     Database db = await instance.database;
-      return await db.insert('usuarios', usuarios.toMap());
+    return await db.insert('usuarios', usuarios.toMap());
   }
 
   static Future<int> updatePassword(
@@ -202,7 +203,7 @@ class DatabaseHelper {
       direccion}) async {
     final db = await database;
     int dbupdate = await db.rawUpdate(
-        'UPDATE servicios SET nombre = ?, apellido =?, fecha = ?, tipoServ = ?, telefono = ?, municipio = ?, direccion = ? WHERE id = ?',
+        'UPDATE servicios SET email=? nombre = ?, apellido =?, fecha = ?, tipoServ = ?, telefono = ?, municipio = ?, direccion = ? WHERE id = ?',
         [
           nombre,
           apellido,
@@ -214,14 +215,5 @@ class DatabaseHelper {
           id
         ]);
     return dbupdate;
-  }
-  Future<List<Map<String, Object?>>> oneService({id})async{
-    final db = await instance.database;
-    var dbService = await db.rawQuery(
-      'select * from service where id=?',[
-        id
-      ]
-    );
-    return dbService ;
   }
 }

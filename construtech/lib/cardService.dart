@@ -162,8 +162,16 @@ class _cardServiceState extends State<cardService> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: ((context) =>
-                                              EditService(id: selectedId))));
+                                          builder: ((context) => EditService(
+                                                id: selectedId,
+                                                nombre: s.nombre,
+                                                apellido: s.apellido,
+                                                direccion: s.direccion,
+                                                fecha: s.fecha,
+                                                municipio: s.municipio,
+                                                telefono: s.telefono,
+                                                tipoServ: s.tipoServ,
+                                              ))));
                                 },
                                 icon: const Icon(Icons.calendar_month)),
                             IconButton(
@@ -181,8 +189,9 @@ class _cardServiceState extends State<cardService> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: ((context) =>
-                                              DetailService(id: selectedId,))));
+                                          builder: ((context) => DetailService(
+                                                id: selectedId,
+                                              ))));
                                 },
                                 icon: const Icon(Icons.remove_red_eye))
                           ],
@@ -197,15 +206,14 @@ class _cardServiceState extends State<cardService> {
           },
         ),
       ),
-      floatingActionButton: const bottom(),
+      floatingActionButton: const Bottom(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
 
-// ignore: camel_case_types
-class bottom extends StatelessWidget {
-  const bottom({super.key});
+class Bottom extends StatelessWidget {
+  const Bottom({super.key});
   @override
   Widget build(BuildContext context) {
     return Row(

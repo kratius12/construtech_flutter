@@ -2,10 +2,30 @@ import 'package:construtech/databasehelper.dart';
 import 'package:flutter/material.dart';
 import 'package:construtech/cardService.dart';
 import 'package:intl/intl.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 
 class EditService extends StatefulWidget {
-  const EditService({super.key, required this.id});
+  const EditService({
+    super.key,
+    required this.id,
+    // required this.email,
+    required this.nombre,
+    required this.apellido,
+    required this.fecha,
+    required this.tipoServ,
+    required this.telefono,
+    required this.municipio,
+    required this.direccion,
+  });
+  final String nombre;
+  final String apellido;
   final int? id;
+  final String fecha;
+  final String tipoServ;
+  final String telefono;
+  final String municipio;
+  final String direccion;
 
   @override
   State<EditService> createState() => _EditService();
@@ -14,14 +34,15 @@ class EditService extends StatefulWidget {
 class _EditService extends State<EditService> {
   final _formKey = GlobalKey<FormState>();
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  final nombreController = TextEditingController();
-  final apellidosController = TextEditingController();
-  final fechaController = TextEditingController();
-  final tipoServController = TextEditingController();
-  final telefonoController = TextEditingController();
-  final municipioController = TextEditingController();
-  final direccionController = TextEditingController();
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+  var nombreController = TextEditingController();
+  var apellidosController = TextEditingController();
+  var fechaController = TextEditingController();
+  var tipoServController = TextEditingController();
+  var telefonoController = TextEditingController();
+  var municipioController = TextEditingController();
+  var direccionController = TextEditingController();
+  var emailController = TextEditingController();
   List<String> listaServicios = [
     "Estuco",
     "Pintura",
@@ -45,9 +66,9 @@ class _EditService extends State<EditService> {
       key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).shadowColor,
-        title: Text(
-          "editar cita ${widget.id}",
-          style: const TextStyle(color: Colors.white),
+        title: const Text(
+          "Editar cita",
+          style: TextStyle(color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(
@@ -65,9 +86,41 @@ class _EditService extends State<EditService> {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                          padding: const EdgeInsets.only(top: 2),
+                        padding: const EdgeInsets.only(top: 2),
+                        child: TextFormField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                              hintText: 'Email',
+                              hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                              fillColor: Color.fromARGB(255, 198, 198, 198),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 0, style: BorderStyle.none),
+                              ),
+                              filled: true),
+                          validator: (value) {
+                            String pattern =
+                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                            RegExp regExp = RegExp(pattern);
+                            if (value!.isEmpty) {
+                              return "El correo es requerido";
+                            } else if (!regExp.hasMatch(value)) {
+                              return "Correo invalido";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
-                            controller: nombreController,
+                            controller: nombreController =
+                                TextEditingController(text: widget.nombre),
                             decoration: const InputDecoration(
                                 hintText: 'Nombre',
                                 hintStyle:
@@ -93,7 +146,8 @@ class _EditService extends State<EditService> {
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
-                            controller: apellidosController,
+                            controller: apellidosController =
+                                TextEditingController(text: widget.apellido),
                             decoration: const InputDecoration(
                                 hintText: 'Apellidos',
                                 hintStyle:
@@ -132,7 +186,8 @@ class _EditService extends State<EditService> {
                                     width: 0, style: BorderStyle.none),
                               ),
                               filled: true),
-                          controller: fechaController,
+                          controller: fechaController =
+                              TextEditingController(text: widget.fecha),
                           readOnly: true,
                           onTap: () async {
                             DateTime? pickedDate = await showDatePicker(
@@ -155,9 +210,9 @@ class _EditService extends State<EditService> {
                       Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: DropdownButtonFormField(
-                          items: listaServicios.map((String value) {
+                          items: listaServicios.map((String tipoServ) {
                             return DropdownMenuItem(
-                                value: value, child: Text(value));
+                                value: tipoServ, child: Text(tipoServ));
                           }).toList(),
                           onChanged: (value) {
                             tipoServController.text = value!;
@@ -184,7 +239,8 @@ class _EditService extends State<EditService> {
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
-                            controller: telefonoController,
+                            controller: telefonoController =
+                                TextEditingController(text: widget.telefono),
                             decoration: const InputDecoration(
                                 hintText: 'Telefono',
                                 hintStyle:
@@ -233,6 +289,10 @@ class _EditService extends State<EditService> {
                             return DropdownMenuItem(
                                 value: value, child: Text(value));
                           }).toList(),
+                          onSaved: (municipio) {
+                            municipioController =
+                                TextEditingController(text: widget.municipio);
+                          },
                           onChanged: (value) {
                             municipioController.text = value!;
                           },
@@ -258,7 +318,8 @@ class _EditService extends State<EditService> {
                       Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TextFormField(
-                            controller: direccionController,
+                            controller: direccionController =
+                                TextEditingController(text: widget.direccion),
                             decoration: const InputDecoration(
                                 hintText: 'Dirección',
                                 hintStyle:
@@ -297,13 +358,14 @@ class _EditService extends State<EditService> {
                                         children: <Widget>[
                                           Icon(
                                             Icons.check_circle,
-                                            color: Colors.purple,
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
                                           ),
                                           SizedBox(
                                             width: 5,
                                           ),
                                           Text(
-                                            "Servicio solicitado con exito!",
+                                            "Cita actualizada con exito!",
                                             style: TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 255, 255, 255)),
@@ -332,6 +394,11 @@ class _EditService extends State<EditService> {
                                               const cardService()),
                                     );
                                   }
+                                  Mailer(
+                                      email: emailController.text,
+                                      fecha: fechaController.text,
+                                      nombre: nombreController.text,
+                                      tipoServ: tipoServController.text);
                                   await DatabaseHelper.instance.update(
                                     nombre: nombreController.text,
                                     apellido: apellidosController.text,
@@ -349,7 +416,7 @@ class _EditService extends State<EditService> {
                                   foregroundColor:
                                       Colors.white, // foreground (text) color
                                 ),
-                                child: const Text('Solicitar')),
+                                child: const Text('Guardar')),
                           )),
                     ],
                   ))
@@ -359,4 +426,32 @@ class _EditService extends State<EditService> {
       ),
     );
   }
+}
+
+Mailer(
+    {required email,
+    required nombre,
+    required tipoServ,
+    required fecha}) async {
+  String username = 'yeisonpl2017@gmail.com'; //Aqui iria su correo personal
+  String password = 'bbiuqpqtolubbmym'; //Contraseña de aplicaciones
+
+  final smtpServer = gmail(username, password);
+
+  final message = Message()
+    ..from = Address(username, 'Constru-tech')
+    ..recipients.add(email) //Correo al cual se enviara el mensaje
+    ..subject = 'Hola $nombre' //Asunto del correo
+    ..html =
+        "Actualizamos tu cita!! \n servicio: $tipoServ, el dia: $fecha"; //Cuerpo del correo
+
+  var connection = PersistentConnection(smtpServer);
+
+  // Send the first message
+  await connection.send(message);
+
+  // send the equivalent message
+
+  // close the connection
+  await connection.close();
 }
