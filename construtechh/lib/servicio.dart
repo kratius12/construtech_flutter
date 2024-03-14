@@ -17,14 +17,10 @@ class ServicioPage extends StatefulWidget {
 class _ServicioPageState extends State<ServicioPage> {
   final _formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final nombreController = TextEditingController();
-  final apellidosController = TextEditingController();
   final fechaController = TextEditingController();
   final tipoServController = TextEditingController();
   final telefonoController = TextEditingController();
-  final municipioController = TextEditingController();
   final direccionController = TextEditingController();
-  final emailController = TextEditingController();
   List<String> listaServicios = [
     "Estuco",
     "Pintura",
@@ -98,58 +94,7 @@ class _ServicioPageState extends State<ServicioPage> {
                           },
                         ),
                       ),
-                      Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: TextFormField(
-                            controller: nombreController,
-                            decoration: const InputDecoration(
-                                hintText: 'Nombre',
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                fillColor: Color.fromARGB(255, 198, 198, 198),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                filled: true),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "El nombre es requerido";
-                              } else {
-                                return null;
-                              }
-                            },
-                          )),
-                      Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                          child: TextFormField(
-                            controller: apellidosController,
-                            decoration: const InputDecoration(
-                                hintText: 'Apellidos',
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                fillColor: Color.fromARGB(255, 198, 198, 198),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 0, style: BorderStyle.none),
-                                ),
-                                filled: true),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Los apellidos son requeridos";
-                              } else {
-                                return null;
-                              }
-                            },
-                          )),
+                      
                       Padding(
                         padding: const EdgeInsets.only(top: 15, right: 1),
                         child: TextFormField(
